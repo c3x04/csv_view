@@ -1,5 +1,8 @@
 'use strict';
 var xls = require('node-simple-xlsx');
+var ipc = require('ipc');
+var remote = require('remote'); 
+var dialog = remote.require('dialog'); 
 angular.module('app')
 	.controller('tableController', function($scope, $mdToast, $timeout, $location, sharedData) {
 		$scope.openChart = function() {
@@ -19,16 +22,25 @@ angular.module('app')
 			$scope.data = csvData.slice(1);
 			$scope.createXLSX = function() {
 				$mdToast.show($mdToast.simple({position: 'right'}).content('Please wait creating xlsx file'));
+    			var fileName = dialog.showSaveDialog(
+    				{
+    				  title: "Test",
+					  filters: [
+					    {name: 'XLSX', extensions: ['xls', 'xlsx']},
+					    {name: 'All Files', extensions: ['*']}
+					  ]
+					}
+    			);
 				$timeout(function () {
 					var writer = new xls();
 					writer.setHeaders(csvData[0]);
 					for (var i = 1; i<csvData.length - 1; i++) {
 						writer.addRow(csvData[i]);
 					}
-					writer.pack('test.xlsx', function (err) {
-		    			if (err) {
-		        			console.log('Error: ', err);
-		    			} else {
+					writer.pack(fileName, function (err) {
+						if (err) {
+							console.log('Error: ', err);
+						} else {
 							$mdToast.show($mdToast.simple({position: 'right'}).content('Done'));
 						}
 					});
