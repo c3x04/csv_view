@@ -5,6 +5,5 @@ Thumbs.db
 .vscode/
 
 /app/spec.js
-/build/
 /releases/
 /tmp/
