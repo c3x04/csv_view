@@ -1,0 +1,20 @@
+md-card
+	md-card-actions(layout="row", layout-align="start center")
+		home-button
+		span(flex='')
+		md-button(class="md-raised md-primary", ng-click="openChart()") Chart
+		span(flex='')
+		md-button(class="md-raised md-primary", ng-click="createXLSX()", style="background-color: #207347;") Create XLSX
+md-card
+	md-toolbar.md-table-toolbar.md-default
+		.md-toolbar-tools
+			span Table
+	md-table-container
+		table(md-table='', md-progress='promise')
+			thead(md-head='')
+				tr(md-row='')
+				th(md-column='', ng-repeat='colHead in tableHead track by $index') {{colHead}}
+			tbody(md-body='')
+				tr(md-row='', ng-repeat='row in data | limitTo: query.limit: (query.page - 1) * query.limit track by $index')
+					td(md-cell='', ng-repeat='col in row track by $index') {{col}}
+	md-table-pagination(md-limit='query.limit', md-limit-options='[5, 10, 15, 50]', md-page='query.page', md-total='{{data.length}}', md-on-paginate="getFakeProgress", md-page-select='')

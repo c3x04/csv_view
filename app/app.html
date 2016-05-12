@@ -1,0 +1,29 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <title>Log Viewer</title>
+    <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css" />
+    <link href="node_modules/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
+    <link href="node_modules/lf-ng-md-file-input/dist/lf-ng-md-file-input.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="node_modules/nvd3/build/nv.d3.min.css">
+    <script src="vendor/electron_boilerplate/env_config.js"></script>
+    <script src="vendor/electron_boilerplate/context_menu.js"></script>
+    <script src="vendor/electron_boilerplate/external_links.js"></script>
+  </head>
+  <body>
+    <div flex tabIndex="-1" role="main">
+      <md-toolbar class="md-whiteframe-10dp">
+          <h2 style="text-align: center;">Log Viewer</h2>
+      </md-toolbar>
+      <md-content flex id="content">
+        <div class="container" ng-cloak>
+          <ng-view></ng-view>
+        </div>
+      </md-content>
+    </div>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="node_modules/lf-ng-md-file-input/dist/lf-ng-md-file-input.min.js"></script>
+  </body>
+</html>
