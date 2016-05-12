@@ -1,10 +1,10 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "identifier": "com.example.electron-boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
-  "version": "0.1.0",
-  "author": "Mr Gumby <gumby@sillywalks.com>",
+  "name": "Log_Viewer",
+  "productName": "Log Viewer",
+  "identifier": "com.app.log_viewer",
+  "description": "View CSV log files from Networks",
+  "version": "1.0.0",
+  "author": "Akash Sharma",
   "main": "background.js",
   "config": {
     "target": "development"
