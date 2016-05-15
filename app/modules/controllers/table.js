@@ -8,7 +8,23 @@ angular.module('app')
 		$scope.openChart = function() {
 			$location.path('/visualizations');
 		};
-		var csvData = sharedData.getData();
+		var csvData = sharedData.getData().map( function(item) { 
+					return item.slice(4,6)
+				});
+		var tData = {};
+		var regex_Location = /\[IPCheck\](.*?)\[/;
+		var regex_Downtime = /\[Downtime:(.*?)\]/;
+		csvData.slice(0, csvData.length - 1).forEach( function(item){
+				var location = regex_Location.exec(item[0])[1].trim();
+				if(tData[location] === undefined) {
+					tData[location] = []
+				}
+				tData[location].push({
+					'time': item[1].trim(),
+					'downtime': regex_Downtime.exec(item[0])[1].trim()
+				});
+			});
+		console.log(tData);
 		$scope.query = {
 			order: 'name',
 			limit: 5,
