@@ -11,31 +11,36 @@ angular.module('app')
 		var csvData = sharedData.getData().map( function(item) { 
 					return item.slice(4,6)
 				});
-		var tData = {};
-		var regex_Location = /\[IPCheck\](.*?)\[/;
+		var regex_Location = /\[IPCheck\](.*?)\[D/;
 		var regex_Downtime = /\[Downtime:(.*?)\]/;
+		var tData = {};
+		var arrTData = [];
 		csvData.slice(0, csvData.length - 1).forEach( function(item){
-				var location = regex_Location.exec(item[0])[1].trim();
-				if(tData[location] === undefined) {
-					tData[location] = []
+				var IPlocation = regex_Location.exec(item[0])[1].trim();
+				if(tData[IPlocation] === undefined) {
+					tData[IPlocation] = {};
+					tData[IPlocation].value = [];
+					tData[IPlocation].location = IPlocation;
 				}
-				tData[location].push({
+				tData[IPlocation].value.push({
 					'time': item[1].trim(),
 					'downtime': regex_Downtime.exec(item[0])[1].trim()
 				});
 			});
-		console.log(tData);
-		$scope.query = {
-			order: 'name',
-			limit: 5,
-			page: 1
-		};
+		angular.forEach(tData, function(element) {
+			arrTData.push(element);
+		});
 		$scope.getFakeProgress =  function() {
 			$scope.promise = $timeout(function () {}, 1000);
 		};
 		$timeout(function () {
-			$scope.tableHead = csvData[0];
-			$scope.data = csvData.slice(1);
+			$scope.tableHead = ['IP/Location', 'Time', 'Downtime'];
+			$scope.data = arrTData;
+			$scope.getFakeProgress();
+			$scope.ipSelect = '';
+			$scope.filter = '';
+			$scope.filterOpt = ['Day', 'Month', 'Year', 'Custom'];
+			$scope.downtimePercent = 92.2;
 			$scope.createXLSX = function() {
 				$mdToast.show($mdToast.simple({position: 'right'}).content('Please wait creating xlsx file'));
     			var fileName = dialog.showSaveDialog(
