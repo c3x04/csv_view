@@ -14,8 +14,15 @@
   </head>
   <body>
     <div flex tabIndex="-1" role="main">
-      <md-toolbar class="md-whiteframe-10dp">
-          <h2 style="text-align: center;">Log Viewer</h2>
+      <md-toolbar class="md-whiteframe-10dp", layout="row" layout-align="start start">
+        <p>
+          <md-button class="md-icon-button" ng-click="goHome()" ng-controller="menuCtrl" aria-label="Home">
+              <ng-md-icon icon="home" style="fill: white" size="32px"></ng-md-icon>
+          </md-button>
+        </p>
+        <span flex></span>
+        <h2 flex=25>Log Viewer</h2>
+        <span flex></span>
       </md-toolbar>
       <md-content flex id="content">
         <div class="container" ng-cloak>

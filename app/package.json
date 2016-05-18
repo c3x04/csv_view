@@ -15,13 +15,16 @@
     "angular-aria": "^1.4.7",
     "angular-material": "1.0.4",
     "angular-material-data-table": "^0.10.9",
+    "angular-material-icons": "^0.7.0",
     "angular-nvd3": "^1.0.7",
     "angular-route": "^1.4.7",
     "babyparse": "^0.4.6",
     "d3": "^3.5.17",
     "fs-jetpack": "^0.7.0",
     "lf-ng-md-file-input": "^1.4.5",
+    "moment": "^2.13.0",
     "node-simple-xlsx": "^1.0.2",
-    "tc-angular-chartjs": "^1.0.15"
+    "tc-angular-chartjs": "^1.0.15",
+    "twix": "^1.0.0"
   }
 }

@@ -1,28 +1,30 @@
-md-card
-	md-card-actions(layout="row", layout-align="start center")
-		home-button
+md-toolbar
+	.md-toolbar-tools
+		| Table
 		span(flex='')
-		md-button(class="md-raised md-primary", ng-click="openChart()") Chart
-		span(flex='')
+		md-button(class="md-raised md-primary", ng-click="openChart()", style="background-color: darkred;") Chart
 		md-button(class="md-raised md-primary", ng-click="createXLSX()", style="background-color: #207347;") Create XLSX
 md-card
 	md-toolbar.md-table-toolbar.md-default
 		.md-toolbar-tools
-			md-select(ng-model="ipSelect")
+			md-select(ng-model="ipSelect", aria-label="Select location")
 				md-option(ng-repeat="item in data track by $index", value="{{item.location}}") {{item.location}}
 			span(flex='')
-			md-select(ng-model="filter")
-				md-option(ng-repeat="opt in filterOpt", value="{{opt}}") {{opt}}
+			//- md-select(ng-model="filter")
+			//- 	md-option(ng-repeat="opt in filterOpt", value="{{opt}}") {{opt}}
+			| From
+			md-datepicker(ng-model="fromDate" md-placeholder="Enter date") 
+			| to 
+			md-datepicker(ng-model="toDate" md-placeholder="Enter date")
 	md-table-container
 		table(md-table='', md-progress='promise')
 			thead(md-head='')
-				tr(md-row='')
 				th(md-column='', ng-repeat='colHead in tableHead track by $index') {{colHead}}
 			tbody(md-body='', ng-repeat='row in data | filter: {location : ipSelect} track by $index')
 				tr(md-row='', ng-repeat='value in row.value')
 					td(md-cell='') {{row.location}}
-					td(md-cell='') {{value.time}}
-					td(md-cell='') {{value.downtime}}
+					td(md-cell='') {{value.time | date:'medium'}}
+					td(md-cell='') {{value.downtime.time}} min
 			tfoot(md-foot='')
 				tr(md-row='')
 				td(md-cell='')
@@ -30,3 +32,4 @@ md-card
 					strong Downtime Percentage:
 						| {{downtimePercent}}
 				td(md-cell='', colspan='6')
+					
