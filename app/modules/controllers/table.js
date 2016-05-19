@@ -9,7 +9,6 @@ angular.module('app')
 		$scope.openChart = function() {
 			$location.path('/visualizations');
 		};
-		console.log(moment("20111031", "YYYYMMDD").fromNow());
 		var csvData = sharedData.getData().map( function(item) { 
 					return item.slice(4,6)
 				});
@@ -29,10 +28,10 @@ angular.module('app')
 					'downtime': new Downtime(regex_Downtime.exec(item[0])[1].trim())
 				});
 			});
+		sharedData.setData(tData);
 		angular.forEach(tData, function(element) {
 			arrTData.push(element);
 		});
-		sharedData.setData(arrTData);
 		$scope.getFakeProgress =  function() {
 			$scope.promise = $timeout(function () {}, 1000);
 		};
