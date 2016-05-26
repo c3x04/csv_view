@@ -7,7 +7,7 @@ angular.module('app')
 		$scope.ipSelect = "SWITCH AT BRPL [10.152.0.234]";
 		$scope.data = sharedData.getData();
 		console.log(moment('2016-11-23').isBetween('2016-11-22', '2016-10-30', 'day', '[]'));
-		$scope.$watch('[fromDate, toDate]', function() {
+		$scope.$watch('[fromDate, toDate, ipSelect]', function() {
 			if($scope.ipSelect !== undefined) {
 				if(($scope.fromDate !== undefined && $scope.toDate === undefined) 
 					|| ( moment($scope.fromDate).isSame($scope.toDate) )) {
@@ -27,76 +27,66 @@ angular.module('app')
 							y: function(d){ return d.y; },
 							useInteractiveGuideline: true,
 							xAxis: {
-								axisLabel: 'Time (hr)'
+								axisLabel: 'Time (hr)',
+								tickFormat: function(d){
+									return d3.time.format("%X")(new Date(d));
+								}
 							},
 							yAxis: {
-								axisLabel: 'Down'
+								axisLabel: 'Down',
+								tickFormat: function(d){
+									return d3.format("%d")(d);
+								}
 							},
 						}
 					};
-					// TODO: Change X:axis ticks to time
-					var x = [];
-					for (var i = 0; i <= 1440; i++) {
-						x[i] = 0;
-					}
+					var _data = [
+						{
+							"color": 'grey',
+							"key": 'Downtime',
+							"values": []
+						}
+					];
+					angular.forEach($scope.data[$scope.ipSelect].value, function(element) {
+						var time = new Date(element.time.toDateString()).getTime();
+						var _y = moment(time).subtract(element.downtime.time, 'minutes');
+						_data[0].values.push({"x": time, "y":_y, "size": 0.57});
+					});
 					$scope.chartData = [{
-						color: 'black',
+						color: 'grey',
 						key: "Downtime",
-						values: [ {"x":0,"y":0}, {"x":1, "y":0}, {"x":1,"y":1}, {"x":2,"y":1}, {"x":2,"y":0}, {"x":3,"y":0}, {"x":4,"y":0}, {"x":5,"y":0} ]
+						values: [ {"x":1463716231327,"y":0}, {"x":1463716231327, "y":0}, {"x":1473716231327,"y":1}, {"x":1483716231327,"y":1}, {"x":1493716231327,"y":0} ]
 					}];
 				} else if($scope.fromDate !== undefined && $scope.toDate !== undefined) {
 					// moment('2016-10-30').isBetween('2016-10-30', '2016-10-30', 'day', '[]'); //true
 					// Use momentjs and set the tableData
 					// Change the options to bar graph
-					$scope.options = { // based on fromDate and toDate this will change
-						chart: {		// TODO: Remove unnecessary configs
-							type: 'historicalBarChart',
+					$scope.options = {
+						chart: {
+							type: 'scatterChart',
 							height: 450,
-							margin : {
-								top: 20,
-								right: 20,
-								bottom: 65,
-								left: 50
+							color: d3.scale.category10().range(),
+							scatter: {
+								onlyCircles: true
 							},
-							x: function(d){return d[0];}, // TODO: Change based on data
-							y: function(d){return d[1];}, // TODO: Change based on data
-							showValues: true,
-							valueFormat: function(d){
-								return d3.format(".1f")(d);
+							showDistX: true,
+							showDistY: true,
+							tooltipContent: function(key) {
+								return '<h3>' + key + '</h3>';
 							},
-							duration: 1000,
+							duration: 350,
 							xAxis: {
 								axisLabel: 'Date',
 								tickFormat: function(d) {
-									return d3.time.format('%x')(new Date(d))
+									return d3.time.format('%d-%B-%Y')(new Date(d));
 								},
-								rotateLabels: 0,
-								showMaxMin: false
+								showMaxMin: true
 							},
 							yAxis: {
-								axisLabel: 'Downtime Percent',
-								axisLabelDistance: -10,
+								axisLabel: 'Downtime',
+								axisLabelDistance: -5,
 								tickFormat: function(d){
-									return d3.format(".1f")(d);
-								}
-							},
-							useInteractiveGuideline: true,
-							// Format: Date: <date>
-							//		   <time> to <time>
-							//		   <time> to <time>
-							tooltip: {
-								contentGenerator: function(d) { 	
-									var date = d3.time.format('%x')(new Date(d.data[0]));
-									return '<b>Date: '+date+'</b>';
-								}
-							},
-							bars: {
-								dispatch: {
-									renderEnd: function() {
-										d3.selectAll("rect.nv-bar").style("fill", function(d, i){
-											return d[1] > 30 ? "red":"green";
-										});
-									}
+									return d3.time.format('%H:%M')(new Date(d));
 								}
 							},
 							zoom: {
@@ -105,32 +95,32 @@ angular.module('app')
 								useFixedDomain: false,
 								useNiceScale: false,
 								horizontalOff: false,
-								verticalOff: true,
+								verticalOff: false,
 								unzoomEventType: 'dblclick.zoom'
 							}
 						}
-					};
-					var _values = [];
-					var valuesDict = {}
+					}
+					var _data = [
+						{
+							"key": "Downtime",
+							"color": 'red',
+							"values":[]
+						}
+					];
 					angular.forEach($scope.data[$scope.ipSelect].value, function(element) {
 						var time = new Date(element.time.toDateString()).getTime();
-						if(valuesDict[time] === undefined) {
-							valuesDict[time] = new Downtime('0h 0m');
-						}
-						valuesDict[time].add(element.downtime);
+						var _y = moment(time).subtract(element.downtime.time, 'minutes');
+						_data[0].values.push({"x": time, "y":_y, "size": 0.57});
 					});
-					Object.keys(valuesDict).forEach(function(key){
-						_values.push([parseInt(key), valuesDict[key].percent()])
-					});
-					console.log(Object.keys(valuesDict));
-					console.log(_values);
-					_values = _values.sort();
-					$scope.chartData = [ // get Data from sharedData service and use Downtime service 
-									//to calc downtime percent
-							{
-								"values" : _values
-							}
-					];
+					$scope.chartData = _data;
+					// _values = _values.sort();
+					// $scope.chartData = [ // get Data from sharedData service and use Downtime service 
+					// 				//to calc downtime percent
+					// 		{
+					// 			color: '#ff7f0e',
+					// 			"values" : _values
+					// 		}
+					// ];
 				}
 			}
 		}, true);
