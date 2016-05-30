@@ -9,6 +9,8 @@ angular.module('app')
 		$scope.openChart = function() {
 			$location.path('/visualizations');
 		};
+		console.log(sharedData.getActData());
+		console.log(sharedData.getInActData());
 		var csvData = sharedData.getData().map( function(item) { 
 					return item.slice(4,6)
 				});

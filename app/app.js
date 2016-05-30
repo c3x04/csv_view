@@ -37,13 +37,27 @@ app.config(['$routeProvider', function($routeProvider) {
 }]);
 app.service('sharedData', function() {
 	var data = [];
+	var inActData = [];
+	var actData = [];
 	return {
-	getData: function() {
-		return data;
-	},
-	setData: function(obj) {
-		data = obj;
-	}
+		getData: function() {
+			return data;
+		},
+		setData: function(obj) {
+			data = obj;
+		},
+		getInActData: function() {
+			return inActData;
+		},
+		setInActData: function(obj) {
+			inActData = obj;
+		},
+		getActData: function() {
+			return actData;
+		},
+		setActData: function(obj) {
+			actData = obj;
+		}
 	}
 });
 app.service('Downtime', function() {
