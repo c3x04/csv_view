@@ -8,7 +8,7 @@ md-card
 	md-toolbar.md-table-toolbar.md-default
 		.md-toolbar-tools
 			md-select(ng-model="ipSelect", aria-label="Select location")
-				md-option(ng-repeat="item in data track by $index", value="{{item.location}}") {{item.location}}
+				md-option(ng-repeat="item in data track by $index", value="{{item.index}}") {{item.index}}
 			span(flex='')
 			//- md-select(ng-model="filter")
 			//- 	md-option(ng-repeat="opt in filterOpt", value="{{opt}}") {{opt}}
@@ -20,9 +20,11 @@ md-card
 		table(md-table='', md-progress='promise')
 			thead(md-head='')
 				th(md-column='', ng-repeat='colHead in tableHead track by $index') {{colHead}}
-			tbody(md-body='', ng-repeat='row in data | filter: {location : ipSelect} track by $index')
+			tbody(md-body='', ng-repeat='row in data | filter: {index : ipSelect} track by $index')
 				tr(md-row='', ng-repeat='value in row.value')
 					td(md-cell='') {{row.location}}
+					td(md-cell='') {{row.ip}}
+					td(md-cell='') {{value.time | date:'medium'}}
 					td(md-cell='') {{value.time | date:'medium'}}
 					td(md-cell='') {{value.downtime.time}} min
 			tfoot(md-foot='')

@@ -2,7 +2,7 @@ md-card
 	md-toolbar.md-table-toolbar.md-default
 		.md-toolbar-tools
 			md-select(ng-model="ipSelect", aria-label="Select Location")
-				md-option(ng-repeat="item in data track by $index", value="{{item.location}}") {{item.location}}
+				md-option(ng-repeat="item in data track by $index", value="{{item.index}}") {{item.index}}
 			span(flex='')
 			| From
 			md-datepicker(ng-model="fromDate" md-placeholder="Enter date") 

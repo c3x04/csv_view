@@ -14,18 +14,22 @@ angular.module('app')
 		var csvData = sharedData.getData().map( function(item) { 
 					return item.slice(4,6)
 				});
-		var regex_Location = /\[IPCheck\](.*?)\[D/;
+		var regex_Index = /\[IPCheck\](.*?)\[D/;
 		var regex_Downtime = /\[Downtime:(.*?)\]/;
+		var regex_Location = /(.*?)\[\d/;
+		var regex_IP = /\[\d+.\d+.\d+.\d+\]/;
 		var tData = {};
 		var arrTData = [];
 		csvData.slice(0, csvData.length - 1).forEach( function(item){
-				var IPlocation = regex_Location.exec(item[0])[1].trim();
-				if(tData[IPlocation] === undefined) {
-					tData[IPlocation] = {};
-					tData[IPlocation].value = [];
-					tData[IPlocation].location = IPlocation;
+				var index = regex_Index.exec(item[0])[1].trim();
+				if(tData[index] === undefined) {
+					tData[index] = {};
+					tData[index].value = [];
+					tData[index].index = index;
+					tData[index].location = regex_Location.exec(index)[1].trim();
+					tData[index].ip = regex_IP.exec(index)[0].split(/\[|\]/).join("");
 				}
-				tData[IPlocation].value.push({
+				tData[index].value.push({
 					'time': new Date(item[1].trim()),
 					'downtime': new Downtime(regex_Downtime.exec(item[0])[1].trim())
 				});
@@ -34,12 +38,13 @@ angular.module('app')
 		angular.forEach(tData, function(element) {
 			arrTData.push(element);
 		});
+		console.log(arrTData);
 		$scope.getFakeProgress =  function() {
 			$scope.promise = $timeout(function () {}, 1000);
 		};
 		
 		$timeout(function () {
-			$scope.tableHead = ['IP/Location', 'Time', 'Downtime'];
+			$scope.tableHead = ['Location', 'IP', 'Up', 'Down', 'Downtime'];
 			$scope.data = arrTData;
 			$scope.getFakeProgress();
 			$scope.ipSelect = '';
