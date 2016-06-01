@@ -66,7 +66,7 @@ angular.module('app')
 						if(moment(element.up.toDateString()).isBetween(_fromDate, _toDate, 'day', '[]') == true) {
 							var _x = new Date(element.up.toDateString()).getTime();
 							var _y = element.down.getTime();
-							_data[0].values.push({"x": _x, "y":_y, "size": (element.downtime.time / 100), "down": element.down, "up": element.up});
+							_data[0].values.push({"x": _x, "y":_y, "size": (element.downtime.percent() / 100), "down": element.down, "up": element.up});
 						}
 					});
 					console.log(_data);
