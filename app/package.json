@@ -1,7 +1,7 @@
 {
-  "name": "Log_Viewer",
-  "productName": "Log Viewer",
-  "identifier": "com.app.log_viewer",
+  "name": "NodeStats",
+  "productName": "NodeStats",
+  "identifier": "com.app.node_stats",
   "description": "View CSV log files from Networks",
   "version": "1.0.0",
   "author": "Akash Sharma",
