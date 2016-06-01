@@ -10,8 +10,6 @@ md-card
 			md-select(ng-model="ipSelect", aria-label="Select location")
 				md-option(ng-repeat="item in data track by $index", value="{{item.index}}") {{item.index}}
 			span(flex='')
-			//- md-select(ng-model="filter")
-			//- 	md-option(ng-repeat="opt in filterOpt", value="{{opt}}") {{opt}}
 			| From
 			md-datepicker(ng-model="fromDate" md-placeholder="Enter date") 
 			| to 
@@ -21,11 +19,11 @@ md-card
 			thead(md-head='')
 				th(md-column='', ng-repeat='colHead in tableHead track by $index') {{colHead}}
 			tbody(md-body='', ng-repeat='row in data | filter: {index : ipSelect} track by $index')
-				tr(md-row='', ng-repeat='value in row.value')
+				tr(md-row='', ng-repeat='value in row.value | filter: dateFilter')
 					td(md-cell='') {{row.location}}
 					td(md-cell='') {{row.ip}}
-					td(md-cell='') {{value.time | date:'medium'}}
-					td(md-cell='') {{value.time | date:'medium'}}
+					td(md-cell='') {{value.up | date:'medium'}}
+					td(md-cell='') {{value.down | date:'medium'}}
 					td(md-cell='') {{value.downtime.time}} min
 			tfoot(md-foot='')
 				tr(md-row='')

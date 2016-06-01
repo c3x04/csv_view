@@ -3,14 +3,24 @@ var xls = require('node-simple-xlsx');
 var remote = require('remote'); 
 var dialog = remote.require('dialog');
 var moment = require('moment');
-require('twix');
 angular.module('app')
 	.controller('tableController', function($scope, $mdToast, $timeout, $location, sharedData, Downtime) {
 		$scope.openChart = function() {
 			$location.path('/visualizations');
 		};
-		console.log(sharedData.getActData());
-		console.log(sharedData.getInActData());
+		$scope.fromDate;
+		$scope.toDate;
+		$scope.dateFilter = function(data) {
+			if($scope.fromDate === undefined && $scope.toDate === undefined) {
+				return true;
+			}
+			var _fromDate = $scope.fromDate.toDateString();
+			var _toDate = $scope.toDate.toDateString();
+			if(moment(data.up.toDateString()).isBetween(_fromDate, _toDate, 'day', '[]') == true) {
+				return true;
+			}
+			return false;
+		};
 		var csvData = sharedData.getData().map( function(item) { 
 					return item.slice(4,6)
 				});
@@ -29,16 +39,18 @@ angular.module('app')
 					tData[index].location = regex_Location.exec(index)[1].trim();
 					tData[index].ip = regex_IP.exec(index)[0].split(/\[|\]/).join("");
 				}
+				var _downtime = new Downtime(regex_Downtime.exec(item[0])[1].trim())
+				var _up = new Date(item[1].trim())
 				tData[index].value.push({
-					'time': new Date(item[1].trim()),
-					'downtime': new Downtime(regex_Downtime.exec(item[0])[1].trim())
+					'up': _up,
+					'down': moment(_up).subtract(_downtime.time, 'minutes').toDate(),
+					'downtime': _downtime
 				});
 			});
 		sharedData.setData(tData);
 		angular.forEach(tData, function(element) {
 			arrTData.push(element);
 		});
-		console.log(arrTData);
 		$scope.getFakeProgress =  function() {
 			$scope.promise = $timeout(function () {}, 1000);
 		};
