@@ -25,11 +25,3 @@ md-card
 					td(md-cell='') {{value.up | date:'medium'}}
 					td(md-cell='') {{value.down | date:'medium'}}
 					td(md-cell='') {{value.downtime.time}} min
-			tfoot(md-foot='')
-				tr(md-row='')
-				td(md-cell='')
-				td(md-cell='')
-					strong Downtime Percentage:
-						| {{downtimePercent}}
-				td(md-cell='', colspan='6')
-					
