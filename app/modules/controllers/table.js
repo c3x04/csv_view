@@ -54,7 +54,6 @@ angular.module('app')
 		$scope.getFakeProgress =  function() {
 			$scope.promise = $timeout(function () {}, 1000);
 		};
-		
 		$timeout(function () {
 			$scope.tableHead = ['Location', 'IP', 'Up', 'Down', 'Downtime'];
 			$scope.data = arrTData;
@@ -75,10 +74,12 @@ angular.module('app')
     			);
 				$timeout(function () {
 					var writer = new xls();
-					writer.setHeaders(csvData[0]);
-					for (var i = 1; i<csvData.length - 1; i++) {
-						writer.addRow(csvData[i]);
-					}
+					writer.setHeaders($scope.tableHead);
+					angular.forEach(arrTData, function(element) {
+						angular.forEach(element.value, function(item){
+							writer.addRow([String(element.location), element.ip.split('.').join('_'), String(item.up), String(item.down), String(item.downtime.time)]);
+						});
+					});
 					writer.pack(fileName, function (err) {
 						if (err) {
 							console.log('Error: ', err);
